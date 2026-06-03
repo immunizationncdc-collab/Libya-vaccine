@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>دليل التطعيمات - ليبيا</title>
+  <meta name="description" content="دليل مراكز التطعيم في ليبيا - المركز الوطني لمكافحة الأمراض" />
+  <meta name="theme-color" content="#1a3a6b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="دليل التطعيمات" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #006233;
+      --green-light: #007a3d;
+      --red: #d4000d;
+      --black: #000000;
+      --gold: #c8a951;
+      --bg: #f4f6fa;
+      --white: #ffffff;
+      --blue-dark: #1a3a6b;
+      --blue-mid: #2354a4;
+      --shadow: 0 4px 24px rgba(0,0,0,0.10);
+      --radius: 18px;
+      --radius-sm: 10px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      background: var(--bg);
+      color: #1a1a2e;
+      min-height: 100vh;
+      direction: rtl;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 60%, #1a6b3a 100%);
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -40px; left: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; right: -30px;
+      width: 150px; height: 150px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .header-inner {
+      padding: 20px 16px 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .header-logo {
+      width: 56px; height: 56px;
+      background: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .header-titles h1 {
+      font-size: 18px;
+      font-weight: 900;
+      color: white;
+      line-height: 1.2;
+    }
+    .header-titles p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+      margin-top: 2px;
+    }
+    .header-flag {
+      display: flex;
+      gap: 0;
+      border-radius: 6px;
+      overflow: hidden;
+      height: 8px;
+      margin-top: 8px;
+    }
+    .flag-r { background: var(--red); flex: 1; }
+    .flag-b { background: var(--black); flex: 1; }
+    .flag-g { background: var(--green); flex: 1; position: relative; }
+    .flag-g::after {
+      content: '☽ ★';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 4px;
+    }
+
+    /* ===== INSTALL BANNER ===== */
+    #install-banner {
+      background: linear-gradient(90deg, var(--gold), #e8c060);
+      color: #1a1a1a;
+      padding: 10px 16px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    #install-banner.show { display: flex; }
+    #install-banner p { font-size: 13px; font-weight: 700; flex: 1; }
+    #install-banner span { font-size: 11px; display: block; font-weight: 400; }
+    .btn-install {
+      background: var(--blue-dark);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-close-banner {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #333;
+      padding: 0 4px;
+    }
+
+    /* ===== STEPS NAV ===== */
+    .steps-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 16px;
+      background: white;
+      border-bottom: 1px solid #e8eaf0;
+    }
+    .step-dot {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: #e0e4ef;
+      color: #888;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.3s;
+      position: relative;
+      z-index: 1;
+    }
+    .step-dot.active {
+      background: var(--blue-mid);
+      color: white;
+      box-shadow: 0 0 0 4px rgba(35,84,164,0.18);
+    }
+    .step-dot.done {
+      background: var(--green);
+      color: white;
+    }
+    .step-line {
+      height: 3px;
+      width: 40px;
+      background: #e0e4ef;
+      transition: background 0.3s;
+    }
+    .step-line.done { background: var(--green); }
+    .step-label {
+      font-size: 10px;
+      color: #888;
+      text-align: center;
+      margin-top: 4px;
+    }
+    .step-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main { padding: 20px 16px 100px; max-width: 600px; margin: 0 auto; }
+
+    /* ===== SECTION CARDS ===== */
+    .section-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+      animation: slideUp 0.4s ease;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title .icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--blue-mid), var(--blue-dark));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+
+    /* ===== GRID BUTTONS ===== */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    .choice-btn {
+      background: var(--bg);
+      border: 2px solid transparent;
+      border-radius: var(--radius-sm);
+      padding: 12px 8px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2a2a4a;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      line-height: 1.3;
+    }
+    .choice-btn:hover {
+      border-color: var(--blue-mid);
+      background: rgba(35,84,164,0.06);
+    }
+    .choice-btn.selected {
+      border-color: var(--blue-mid);
+      background: linear-gradient(135deg, rgba(35,84,164,0.12), rgba(26,58,107,0.08));
+      color: var(--blue-dark);
+    }
+    .choice-btn .sub { font-size: 11px; color: #888; font-weight: 400; margin-top: 2px; }
+
+    /* age buttons */
+    .age-btn {
+      background: var(--bg);
+      border: 2px solid transparent;
+      border-radius: var(--radius-sm);
+      padding: 10px 6px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #2a2a4a;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .age-btn:hover { border-color: var(--blue-mid); background: rgba(35,84,164,0.06); }
+    .age-btn.selected {
+      border-color: var(--green);
+      background: linear-gradient(135deg, rgba(0,98,51,0.12), rgba(0,122,61,0.06));
+      color: var(--green);
+    }
+    .age-btn .emoji { font-size: 18px; display: block; margin-bottom: 4px; }
+
+    /* ===== RESULTS ===== */
+    .results-header {
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid));
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      color: white;
+      margin-bottom: 14px;
+    }
+    .results-header h2 { font-size: 16px; font-weight: 900; margin-bottom: 4px; }
+    .results-header p { font-size: 12px; opacity: 0.85; }
+    .results-meta {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .tag {
+      background: rgba(255,255,255,0.2);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    /* vaccines list */
+    .vaccines-card {
+      background: linear-gradient(135deg, #f0f7f0, #e8f4ea);
+      border: 1px solid #c8e6c9;
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 14px;
+    }
+    .vaccines-card h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .vaccine-pill {
+      display: inline-block;
+      background: white;
+      border: 1px solid #a5d6a7;
+      color: #2e7d32;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 3px 3px 3px 0;
+    }
+
+    /* center card */
+    .center-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border-right: 4px solid var(--blue-mid);
+      animation: slideUp 0.3s ease;
+    }
+    .center-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--blue-dark);
+      margin-bottom: 8px;
+    }
+    .center-info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .center-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 13px;
+      color: #555;
+    }
+    .center-row .lbl {
+      font-weight: 600;
+      color: #333;
+      white-space: nowrap;
+    }
+    .days-wrap { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+    .day-chip {
+      background: var(--bg);
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      color: #444;
+    }
+    .day-chip.highlight {
+      background: rgba(35,84,164,0.1);
+      border-color: var(--blue-mid);
+      color: var(--blue-dark);
+      font-weight: 700;
+    }
+
+    /* ===== RESET BTN ===== */
+    .btn-reset {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid));
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'Cairo', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.2s;
+    }
+    .btn-reset:hover { opacity: 0.9; }
+
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: white;
+      border-top: 1px solid #e8eaf0;
+      padding: 8px 16px;
+      display: flex;
+      gap: 10px;
+      max-width: 600px;
+      margin: 0 auto;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    }
+    .btn-nav {
+      flex: 1;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-family: 'Cairo', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-nav.primary {
+      background: linear-gradient(135deg, var(--green), var(--green-light));
+      color: white;
+    }
+    .btn-nav.secondary {
+      background: var(--bg);
+      color: var(--blue-dark);
+      border: 1px solid #ddd;
+    }
+    .btn-nav:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ===== EMPTY ===== */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #888;
+    }
+    .empty-state .big { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; line-height: 1.6; }
+
+    /* ===== NO RESULTS ===== */
+    .no-results {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      color: #6d4c00;
+    }
+    .no-results .big { font-size: 36px; margin-bottom: 8px; }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="header-logo">🏥</div>
+      <div class="header-titles">
+        <h1>دليل مراكز التطعيم</h1>
+        <p>المركز الوطني لمكافحة الأمراض – ليبيا</p>
+      </div>
+    </div>
+    <div class="header-flag">
+      <div class="flag-r"></div>
+      <div class="flag-b"></div>
+      <div class="flag-g"></div>
+    </div>
+  </div>
+</div>
+
+<!-- INSTALL BANNER -->
+<div id="install-banner">
+  <div>
+    <p>📲 ثبّت التطبيق على هاتفك</p>
+    <span>للوصول السريع في أي وقت</span>
+  </div>
+  <button class="btn-install" id="btn-install-click">تثبيت</button>
+  <button class="btn-close-banner" id="btn-close-banner">✕</button>
+</div>
+
+<!-- STEPS NAV -->
+<div class="steps-nav" id="steps-nav">
+  <div class="step-wrap">
+    <div class="step-dot active" id="dot1">1</div>
+    <div class="step-label">البلدية</div>
+  </div>
+  <div class="step-line" id="line1"></div>
+  <div class="step-wrap">
+    <div class="step-dot" id="dot2">2</div>
+    <div class="step-label">العمر</div>
+  </div>
+  <div class="step-line" id="line2"></div>
+  <div class="step-wrap">
+    <div class="step-dot" id="dot3">3</div>
+    <div class="step-label">النتائج</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main-content"></div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="btn-nav secondary" id="btn-back" onclick="goBack()" disabled>→ رجوع</button>
+  <button class="btn-nav primary" id="btn-next" onclick="goNext()" disabled>التالي ←</button>
+</div>
+
+<script>
+// =============================================
+// DATA
+// =============================================
+const vaccineSchedule = {
+  "عند الولادة": {
+    label: "حديثي الولادة",
+    emoji: "👶",
+    vaccines: [
+      "الواقي من الدرن (BCG)",
+      "التهاب الكبد الفيروسي الباني (HepB)",
+      "شلل الأطفال الفموي (OPV)"
+    ]
+  },
+  "شهرين": {
+    label: "عمر الشهرين",
+    emoji: "🍼",
+    vaccines: [
+      "السداسي Hexa (DTaP+IPV+Hib+HepB)",
+      "العجيلة (Rota Virus)",
+      "المكورات الرئوية (PCV)"
+    ]
+  },
+  "4 أشهر": {
+    label: "عمر 4 أشهر",
+    emoji: "🌱",
+    vaccines: [
+      "السداسي Hexa (DTaP+IPV+Hib+HepB)",
+      "العجيلة (Rota Virus)",
+      "المكورات الرئوية (PCV)"
+    ]
+  },
+  "6 أشهر": {
+    label: "عمر 6 أشهر",
+    emoji: "🌙",
+    vaccines: [
+      "السداسي Hexa (DTaP+IPV+Hib+HepB)",
+      "العجيلة (Rota Virus)"
+    ]
+  },
+  "9 أشهر": {
+    label: "عمر 9 أشهر",
+    emoji: "🌟",
+    vaccines: [
+      "السحايا الرباعي المقترن (Meningococcal A,C,Y,W135)",
+      "شلل الأطفال الفموي (OPV)"
+    ]
+  },
+  "12 شهر": {
+    label: "عمر 12 شهر",
+    emoji: "🎂",
+    vaccines: [
+      "المركب الفيروسي MMR (الحصبة، الحصبة الألمانية، النكاف)",
+      "السحايا الرباعي المقترن (Meningococcal A,C,Y,W135)",
+      "المكورات الرئوية (PCV)"
+    ]
+  },
+  "15 شهر": {
+    label: "عمر 15 شهر",
+    emoji: "🧒",
+    vaccines: [
+      "التهاب الكبد الفيروسي الألفي (HepA)",
+      "الجديري المائي (Chickenpox)"
+    ]
+  },
+  "18 شهر": {
+    label: "عمر 18 شهر",
+    emoji: "🚶",
+    vaccines: [
+      "المركب الفيروسي MMR",
+      "الخماسي Penta (DTaP+IPV+Hib)"
+    ]
+  },
+  "6 سنوات": {
+    label: "عمر 6 سنوات",
+    emoji: "🎒",
+    vaccines: [
+      "الرباعي (DTap+IPV)",
+      "الجديري المائي (Chickenpox)"
+    ]
+  },
+  "12 سنة": {
+    label: "عمر 12 سنة",
+    emoji: "📚",
+    vaccines: [
+      "السحايا الرباعي المقترن (Meningococcal A,C,Y,W135)"
+    ]
+  },
+  "15 سنة": {
+    label: "عمر 15 سنة (للبنات)",
+    emoji: "👩",
+    vaccines: [
+      "الورم الحليمي البشري HPV"
+    ]
+  },
+  "فئات الخطر": {
+    label: "فئات ذوو الاختطار",
+    emoji: "⚠️",
+    vaccines: [
+      "الثلاثي البكتيري TdaP (الخناق والكزاز والشاهوق)",
+      "الإنفلونزا الموسمية (Seasonal Flu)"
+    ]
+  }
+};
+
+// Municipality data
+const municipalities = {
+  "الخمس": {
+    ageKey: "all",
+    centers: [
+      { name: "غنيمة", days: { "عند الولادة": ["السبت","الاثنين"], "شهرين": ["السبت","الاثنين"], "4 أشهر": ["السبت","الاثنين"], "6 أشهر": ["السبت","الاثنين"], "9 أشهر": ["السبت"], "12 شهر": ["السبت","الاثنين"], "15 شهر": ["السبت","الاثنين"], "18 شهر": ["السبت","الاثنين"] } },
+      { name: "النقازة", days: { "عند الولادة": ["الأحد","الأربعاء"], "شهرين": ["الأحد","الأربعاء"], "4 أشهر": ["الأحد","الأربعاء"], "6 أشهر": ["الأحد","الأربعاء"], "9 أشهر": ["الأحد","الأربعاء"], "12 شهر": ["الأحد","الأربعاء"], "15 شهر": ["الأحد","الأربعاء"], "18 شهر": ["الأحد","الأربعاء"] } },
+      { name: "سبيلين", days: { "عند الولادة": ["الثلاثاء","الخميس"], "شهرين": ["الثلاثاء","الخميس"], "4 أشهر": ["الثلاثاء","الخميس"], "6 أشهر": ["الثلاثاء","الخميس"], "9 أشهر": ["الثلاثاء","الخميس"], "12 شهر": ["الثلاثاء","الخميس"], "15 شهر": ["الثلاثاء","الخميس"], "18 شهر": ["الثلاثاء","الخميس"] } },
+      { name: "الجحاوات", days: { "عند الولادة": ["الاثنين","الخميس"], "شهرين": ["الاثنين","الخميس"], "4 أشهر": ["الاثنين","الخميس"], "6 أشهر": ["الاثنين","الخميس"], "9 أشهر": ["الاثنين","الخميس"], "12 شهر": ["الاثنين","الخميس"], "15 شهر": ["الاثنين","الخميس"], "18 شهر": ["الاثنين","الخميس"] } },
+      { name: "الحمروني", days: { "عند الولادة": ["السبت","الثلاثاء"], "شهرين": ["السبت","الثلاثاء"], "4 أشهر": ["السبت","الثلاثاء"], "6 أشهر": ["السبت","الثلاثاء"], "9 أشهر": ["السبت","الثلاثاء"], "12 شهر": ["السبت","الثلاثاء"], "15 شهر": ["السبت","الثلاثاء"], "18 شهر": ["السبت","الثلاثاء"] } },
+      { name: "وافـي", days: { "عند الولادة": ["الأحد","الأربعاء"], "شهرين": ["الأحد","الأربعاء"], "4 أشهر": ["الأحد","الأربعاء"], "6 أشهر": ["الأحد","الأربعاء"], "9 أشهر": ["الأحد","الأربعاء"], "12 شهر": ["الأحد","الأربعاء"], "15 شهر": ["الأحد","الأربعاء"], "18 شهر": ["الأحد","الأربعاء"] } },
+      { name: "حمـود", days: { "عند الولادة": ["الأحد","الخميس"], "شهرين": ["الأحد","الخميس"], "4 أشهر": ["الأحد","الخميس"], "6 أشهر": ["الأحد","الخميس"], "9 أشهر": ["الأحد","الخميس"], "12 شهر": ["الأحد","الخميس"], "15 شهر": ["الأحد","الخميس"], "18 شهر": ["الأحد","الخميس"] } },
+      { name: "الخمس المدينة", days: { "عند الولادة": ["الأحد","الخميس"], "شهرين": ["الأحد","الخميس"], "4 أشهر": ["الأحد","الخميس"], "6 أشهر": ["الأحد","الخميس"], "9 أشهر": ["الأحد","الخميس"], "12 شهر": ["الأحد","الخميس"], "15 شهر": ["الأحد","الخميس"], "18 شهر": ["الأحد","الخميس"] } },
+      { name: "راس الحمام", days: { "عند الولادة": ["السبت","الاثنين"], "شهرين": ["السبت","الاثنين"], "4 أشهر": ["السبت","الاثنين"], "6 أشهر": ["السبت","الاثنين"], "9 أشهر": ["السبت","الاثنين"], "12 شهر": ["السبت","الاثنين"], "15 شهر": ["السبت","الاثنين"], "18 شهر": ["السبت","الاثنين"] } },
+      { name: "المقريف", days: { "عند الولادة": ["الثلاثاء","الخميس"], "شهرين": ["الثلاثاء","الخميس"], "4 أشهر": ["الثلاثاء","الخميس"], "6 أشهر": ["الثلاثاء","الخميس"], "9 أشهر": ["الثلاثاء","الخميس"], "12 شهر": ["الثلاثاء","الخميس"], "15 شهر": ["الثلاثاء","الخميس"], "18 شهر": ["الثلاثاء","الخميس"] } },
+      { name: "سوق الخميس التحرير", days: { "عند الولادة": ["الاثنين","الأربعاء"], "شهرين": ["الاثنين","الأربعاء"], "4 أشهر": ["الاثنين","الأربعاء"], "6 أشهر": ["الاثنين","الأربعاء"], "9 أشهر": ["الاثنين","الأربعاء"], "12 شهر": ["الاثنين","الأربعاء"], "15 شهر": ["الاثنين","الأربعاء"], "18 شهر": ["الاثنين","الأربعاء"] } },
+      { name: "احمد بن ابراهيم", days: { "عند الولادة": ["الاثنين","الخميس"], "شهرين": ["الاثنين","الخميس"], "4 أشهر": ["الاثنين","الخميس"], "6 أشهر": ["الاثنين","الخميس"], "9 أشهر": ["الاثنين","الخميس"], "12 شهر": ["الاثنين","الخميس"], "15 شهر": ["الاثنين","الخميس"], "18 شهر": ["الاثنين","الخميس"] } },
+      { name: "اولاد نماء كعام", days: { "عند الولادة": ["السبت","الثلاثاء"], "شهرين": ["السبت","الثلاثاء"], "4 أشهر": ["السبت","الثلاثاء"], "6 أشهر": ["السبت","الثلاثاء"], "9 أشهر": ["السبت","الثلاثاء"], "12 شهر": ["السبت","الثلاثاء"], "15 شهر": ["السبت","الثلاثاء"], "18 شهر": ["السبت","الثلاثاء"] } },
+      { name: "أم الرتم", days: { "عند الولادة": ["السبت","الثلاثاء"], "شهرين": ["السبت","الثلاثاء"], "4 أشهر": ["السبت","الثلاثاء"], "6 أشهر": ["السبت","الثلاثاء"], "9 أشهر": ["السبت","الثلاثاء"], "12 شهر": ["السبت","الثلاثاء"], "15 شهر": ["السبت","الثلاثاء"], "18 شهر": ["السبت","الثلاثاء"] } },
+      { name: "كعـام", days: { "عند الولادة": ["الاثنين","الخميس"], "شهرين": ["الاثنين","الخميس"], "4 أشهر": ["الاثنين","الخميس"], "6 أشهر": ["الاثنين","الخميس"], "9 أشهر": ["الاثنين","الخميس"], "12 شهر": ["الاثنين","الخميس"], "15 شهر": ["الاثنين","الخميس"], "18 شهر": ["الاثنين","الخميس"] } },
+      { name: "سوق الخميس الوادي", days: { "عند الولادة": ["الاثنين","الأربعاء"], "شهرين": ["الاثنين","الأربعاء"], "4 أشهر": ["الاثنين","الأربعاء"], "6 أشهر": ["الاثنين","الأربعاء"], "9 أشهر": ["الاثنين","الأربعاء"], "12 شهر": ["الاثنين","الأربعاء"], "15 شهر": ["الاثنين","الأربعاء"], "18 شهر": ["الاثنين","الأربعاء"] } },
+      { name: "الرقـب", days: { "عند الولادة": ["الأحد","الخميس"], "شهرين": ["الأحد","الخميس"], "4 أشهر": ["الأحد","الخميس"], "6 أشهر": ["الأحد","الخميس"], "9 أشهر": ["الأحد","الخميس"], "12 شهر": ["الأحد","الخميس"], "15 شهر": ["الأحد","الخميس"], "18 شهر": ["الأحد","الخميس"] } }
+    ]
+  },
+  "تاجوراء": {
+    ageKey: "all",
+    centers: [
+      { name: "مستشفى القلب تاجوراء", address: "تاجوراء", days: { "عند الولادة": ["السبت","الاثنين","الخميس"], "شهرين": [], "4 أشهر": [], "6 أشهر": [], "9 أشهر": [], "12 شهر": [], "15 شهر": [], "18 شهر": [] }, note: "تطعيم المواليد فقط" },
+      { name: "العيادة المجمعة وريمة", address: "تاجوراء", days: { "عند الولادة": ["الأحد","الخميس"], "شهرين": ["السبت","الأحد","الثلاثاء","الخميس"], "4 أشهر": ["السبت","الأحد","الثلاثاء","الخميس"], "6 أشهر": ["السبت","الأحد","الثلاثاء","الخميس"], "9 أشهر": ["الأحد","الخميس"], "12 شهر": ["السبت","الأحد","الثلاثاء","الخميس"], "15 شهر": ["السبت","الأحد","الثلاثاء","الخميس"], "18 شهر": ["السبت","الأحد","الثلاثاء","الخميس"] } },
+      { name: "المركز الصحي المراونة", address: "تاجوراء", days: { "عند الولادة": ["الثلاثاء","الأربعاء"], "شهرين": ["السبت","الاثنين","الثلاثاء","الأربعاء"], "4 أشهر": ["السبت","الاثنين","الثلاثاء","الأربعاء"], "6 أشهر": ["السبت","الاثنين","الثلاثاء","الأربعاء"], "9 أشهر": ["الأربعاء"], "12 شهر": ["السبت","الاثنين","الثلاثاء","الأربعاء"], "15 شهر": ["السبت","الاثنين","الثلاثاء","الأربعاء"], "18 شهر": ["السبت","الاثنين","الثلاثاء","الأربعاء"] } },
+      { name: "المركز الصحي الحميدية", address: "تاجوراء", days: { "عند الولادة": [], "شهرين": ["السبت","الأحد","الثلاثاء","الأربعاء"], "4 أشهر": ["السبت","الأحد","الثلاثاء","الأربعاء"], "6 أشهر": ["السبت","الأحد","الثلاثاء","الأربعاء"], "9 أشهر": ["الأربعاء"], "12 شهر": ["السبت","الأحد","الثلاثاء","الأربعاء"], "15 شهر": ["السبت","الأحد","الثلاثاء","الأربعاء"], "18 شهر": ["السبت","الأحد","الثلاثاء","الأربعاء"] } },
+      { name: "العيادة المجمعة غوط الرمان", address: "تاجوراء", days: { "عند الولادة": [], "شهرين": ["السبت","الاثنين","الثلاثاء","الأربعاء"], "4 أشهر": ["السبت","الاثنين","الثلاثاء","الأربعاء"], "6 أشهر": ["السبت","الاثنين","الثلاثاء","الأربعاء"], "9 أشهر": ["الأربعاء"], "12 شهر": ["السبت","الاثنين","الثلاثاء","الأربعاء"], "15 شهر": ["السبت","الاثنين","الثلاثاء","الأربعاء"], "18 شهر": ["السبت","الاثنين","الثلاثاء","الأربعاء"] } },
+      { name: "المركز الصحي 17 فبراير", address: "تاجوراء", days: { "عند الولادة": [], "شهرين": ["السبت","الأحد","الثلاثاء","الخميس"], "4 أشهر": ["السبت","الأحد","الثلاثاء","الخميس"], "6 أشهر": ["السبت","الأحد","الثلاثاء","الخميس"], "9 أشهر": ["السبت","الثلاثاء"], "12 شهر": ["السبت","الأحد","الثلاثاء","الخميس"], "15 شهر": ["السبت","الأحد","الثلاثاء","الخميس"], "18 شهر": ["السبت","الأحد","الثلاثاء","الخميس"] } },
+      { name: "المركز الصحي سيدي خليفة", address: "تاجوراء", days: { "عند الولادة": [], "شهرين": ["السبت","الاثنين","الأربعاء","الخميس"], "4 أشهر": ["السبت","الاثنين","الأربعاء","الخميس"], "6 أشهر": ["السبت","الاثنين","الأربعاء","الخميس"], "9 أشهر": ["الاثنين"], "12 شهر": ["السبت","الاثنين","الأربعاء","الخميس"], "15 شهر": ["السبت","الاثنين","الأربعاء","الخميس"], "18 شهر": ["السبت","الاثنين","الأربعاء","الخميس"] } },
+      { name: "المركز الصحي النعم", address: "تاجوراء", days: { "عند الولادة": [], "شهرين": ["السبت","الثلاثاء","الخميس"], "4 أشهر": ["السبت","الثلاثاء","الخميس"], "6 أشهر": ["السبت","الثلاثاء","الخميس"], "9 أشهر": ["السبت"], "12 شهر": ["السبت","الثلاثاء","الخميس"], "15 شهر": ["السبت","الثلاثاء","الخميس"], "18 شهر": ["السبت","الثلاثاء","الخميس"] } },
+      { name: "المركز الصحي التشيع", address: "تاجوراء", days: { "عند الولادة": [], "شهرين": ["السبت","الثلاثاء","الخميس"], "4 أشهر": ["السبت","الثلاثاء","الخميس"], "6 أشهر": ["السبت","الثلاثاء","الخميس"], "9 أشهر": ["الثلاثاء"], "12 شهر": ["السبت","الثلاثاء","الخميس"], "15 شهر": ["السبت","الثلاثاء","الخميس"], "18 شهر": ["السبت","الثلاثاء","الخميس"] } },
+      { name: "المركز الصحي يحي بن يحي السويدي", address: "تاجوراء", days: { "عند الولادة": [], "شهرين": ["السبت","الاثنين","الأربعاء"], "4 أشهر": ["السبت","الاثنين","الأربعاء"], "6 أشهر": ["السبت","الاثنين","الأربعاء"], "9 أشهر": ["الأربعاء"], "12 شهر": ["السبت","الاثنين","الأربعاء"], "15 شهر": ["السبت","الاثنين","الأربعاء"], "18 شهر": ["السبت","الاثنين","الأربعاء"] } },
+      { name: "المركز الصحي راية الاستقلال", address: "تاجوراء", days: { "عند الولادة": [], "شهرين": ["السبت","الأحد","الثلاثاء","الخميس"], "4 أشهر": ["السبت","الأحد","الثلاثاء","الخميس"], "6 أشهر": ["السبت","الأحد","الثلاثاء","الخميس"], "9 أشهر": ["الخميس"], "12 شهر": ["السبت","الأحد","الثلاثاء","الخميس"], "15 شهر": ["السبت","الأحد","الثلاثاء","الخميس"], "18 شهر": ["السبت","الأحد","الثلاثاء","الخميس"] } }
+    ]
+  },
+  "درنة": {
+    ageKey: "split",
+    centers: [
+      { name: "المركز الصحي عمر المختار", address: "الساحل الشرقي / سوق العام سابقاً", days: { "عند الولادة": ["السبت"], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["يومياً"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "العيادات الخارجية محمود الهريش", address: "حي السلام / أمبخ العمارات", days: { "عند الولادة": ["الثلاثاء"], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["يومياً"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "المركز الصحي عين مارة", address: "منطقة عين مارة", days: { "عند الولادة": ["15 من كل شهر"], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["يومياً"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "المركز الصحي شهداء الحرية", address: "منطقة كرسة", days: { "عند الولادة": ["30 من كل شهر"], "شهرين": ["السبت","الخميس"], "4 أشهر": ["السبت","الخميس"], "6 أشهر": ["السبت","الخميس"], "9 أشهر": ["السبت","الخميس"], "12 شهر": ["السبت","الخميس"], "15 شهر": ["السبت","الخميس"], "18 شهر": ["السبت","الخميس"] } },
+      { name: "العيادات المجمعة يوسف بو رحيل", address: "شيحا الشرقية / جامعة شيبا", days: { "عند الولادة": [], "شهرين": ["طيلة أيام الأسبوع"], "4 أشهر": ["طيلة أيام الأسبوع"], "6 أشهر": ["طيلة أيام الأسبوع"], "9 أشهر": ["طيلة أيام الأسبوع"], "12 شهر": ["طيلة أيام الأسبوع"], "15 شهر": ["طيلة أيام الأسبوع"], "18 شهر": ["طيلة أيام الأسبوع"] } },
+      { name: "المركز الصحي أم المؤمنين", address: "حي السيدة خديجة / شارع رقم 6", days: { "عند الولادة": [], "شهرين": ["طيلة أيام الأسبوع"], "4 أشهر": ["طيلة أيام الأسبوع"], "6 أشهر": ["طيلة أيام الأسبوع"], "9 أشهر": ["طيلة أيام الأسبوع"], "12 شهر": ["طيلة أيام الأسبوع"], "15 شهر": ["طيلة أيام الأسبوع"], "18 شهر": ["طيلة أيام الأسبوع"] } },
+      { name: "المركز الصحي لأثرون", address: "منطقة لأثرون", days: { "عند الولادة": [], "شهرين": ["طيلة أيام الأسبوع"], "4 أشهر": ["طيلة أيام الأسبوع"], "6 أشهر": ["طيلة أيام الأسبوع"], "9 أشهر": ["طيلة أيام الأسبوع"], "12 شهر": ["طيلة أيام الأسبوع"], "15 شهر": ["طيلة أيام الأسبوع"], "18 شهر": ["طيلة أيام الأسبوع"] } },
+      { name: "مكتب الرعاية الصحية الأولية", address: "باب طبرق / خلف كلية الطب", days: { "عند الولادة": [], "شهرين": [], "4 أشهر": [], "6 أشهر": [], "9 أشهر": [], "12 شهر": [], "15 شهر": [], "18 شهر": [], "فئات الخطر": ["من الأحد إلى الخميس"] }, note: "تطعيمات البالغين والمسافرين فقط" }
+    ]
+  },
+  "مصراتة": {
+    ageKey: "all",
+    centers: [
+      { name: "وحدة حديثي الولادة – مركز مصراتة الطبي", address: "مصراتة", days: { "عند الولادة": ["يومياً"], "شهرين": [], "4 أشهر": [], "6 أشهر": [], "9 أشهر": [], "12 شهر": [], "15 شهر": [], "18 شهر": [] }, note: "خاص بالمواليد فقط" },
+      { name: "العيادة المجمعة المحجوب", address: "مصراتة", days: { "عند الولادة": ["الأربعاء"], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["الأربعاء"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "مستشفى قصر أحمد العام", address: "مصراتة", days: { "عند الولادة": ["السبت"], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["السبت"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "مجمع عيادات الزروق", address: "مصراتة", days: { "عند الولادة": ["يومياً ما عدا السبت"], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": [], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "مستشفى الوشكة القروي", address: "الوشكة", days: { "عند الولادة": ["10 من كل شهر"], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["30 من كل شهر"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "مستشفى أبو قرين القروي", address: "أبو قرين", days: { "عند الولادة": ["10 من كل شهر"], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["30 من كل شهر"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "مجمع عيادات مرباط", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["الثلاثاء"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "مجمع عيادات الجزيرة", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["الأربعاء"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "مجمع عيادات الغيران", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["الأحد"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "مجمع عيادات الدافنية", address: "الدافنية", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["الأحد"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "المركز الصحي شهداء رأس الطوبة", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["الاثنين"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "المركز الصحي شهداء الرميلة", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["الأربعاء"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "المركز الصحي كرزاز الطبي", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": [], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "المركز الصحي سيدي مبارك", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["الخميس"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "المركز الصحي السكيرات", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": [], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "المركز الصحي المرسى", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["الاثنين"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "المركز الصحي اقزير", address: "اقزير", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": [], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "المركز الصحي المحجوب", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": [], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "المركز الصحي رأس الهجمة", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": [], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "وحدة الرعاية أبو روية", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["السبت"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "وحدة الرعاية رأس السائح", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": [], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "وحدة الرعاية شاطئ النخيل", address: "مصراتة", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": ["الثلاثاء"], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } },
+      { name: "وحدة الرعاية يدر", address: "يدر", days: { "عند الولادة": [], "شهرين": ["يومياً"], "4 أشهر": ["يومياً"], "6 أشهر": ["يومياً"], "9 أشهر": [], "12 شهر": ["يومياً"], "15 شهر": ["يومياً"], "18 شهر": ["يومياً"] } }
+    ]
+  }
+};
+
+// =============================================
+// STATE
+// =============================================
+let state = { step: 1, municipality: null, age: null };
+let deferredPrompt = null;
+
+// =============================================
+// PWA INSTALL
+// =============================================
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-banner').classList.add('show');
+});
+
+document.getElementById('btn-install-click').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('install-banner').classList.remove('show');
+  }
+});
+
+document.getElementById('btn-close-banner').addEventListener('click', () => {
+  document.getElementById('install-banner').classList.remove('show');
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-banner').classList.remove('show');
+});
+
+// =============================================
+// STEPS
+// =============================================
+function updateSteps() {
+  const { step } = state;
+  ['dot1','dot2','dot3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.classList.remove('active','done');
+    if (i + 1 < step) el.classList.add('done');
+    else if (i + 1 === step) el.classList.add('active');
+  });
+  ['line1','line2'].forEach((id, i) => {
+    document.getElementById(id).classList.toggle('done', step > i + 2);
+  });
+
+  const btnBack = document.getElementById('btn-back');
+  const btnNext = document.getElementById('btn-next');
+  btnBack.disabled = step === 1;
+
+  if (step === 1) {
+    btnNext.textContent = 'التالي ←';
+    btnNext.disabled = !state.municipality;
+  } else if (step === 2) {
+    btnNext.textContent = 'عرض النتائج ←';
+    btnNext.disabled = !state.age;
+  } else {
+    btnNext.style.display = 'none';
+  }
+  if (step === 3) btnNext.style.display = 'none';
+  else btnNext.style.display = '';
+}
+
+function goNext() {
+  if (state.step === 1 && state.municipality) state.step = 2;
+  else if (state.step === 2 && state.age) state.step = 3;
+  render();
+}
+
+function goBack() {
+  if (state.step > 1) {
+    state.step--;
+    if (state.step === 1) state.municipality = null;
+    if (state.step === 2) state.age = null;
+    render();
+  }
+}
+
+// =============================================
+// RENDER
+// =============================================
+function render() {
+  updateSteps();
+  const container = document.getElementById('main-content');
+  if (state.step === 1) renderStep1(container);
+  else if (state.step === 2) renderStep2(container);
+  else if (state.step === 3) renderStep3(container);
+}
+
+function renderStep1(container) {
+  const muniList = Object.keys(municipalities);
+  container.innerHTML = `
+    <div class="section-card">
+      <div class="section-title">
+        <div class="icon">🗺️</div>
+        اختر البلدية
+      </div>
+      <div class="grid-2">
+        ${muniList.map(m => `
+          <button class="choice-btn ${state.municipality === m ? 'selected' : ''}" onclick="selectMunicipality('${m}')">
+            🏙️ ${m}
+          </button>
+        `).join('')}
+        <button class="choice-btn" onclick="showComingSoon()" style="opacity:0.5;border-style:dashed;">
+          ➕ قريباً...
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function selectMunicipality(m) {
+  state.municipality = m;
+  state.age = null;
+  render();
+}
+
+function showComingSoon() {
+  alert('سيتم إضافة المزيد من البلديات قريباً 🚀');
+}
+
+function renderStep2(container) {
+  const ages = Object.keys(vaccineSchedule);
+  container.innerHTML = `
+    <div class="section-card">
+      <div class="section-title">
+        <div class="icon">👶</div>
+        اختر عمر الطفل
+      </div>
+      <p style="font-size:13px;color:#777;margin-bottom:14px;">بلدية: <strong>${state.municipality}</strong></p>
+      <div class="grid-3">
+        ${ages.map(age => {
+          const info = vaccineSchedule[age];
+          return `
+            <button class="age-btn ${state.age === age ? 'selected' : ''}" onclick="selectAge('${age}')">
+              <span class="emoji">${info.emoji}</span>
+              ${info.label}
+            </button>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function selectAge(age) {
+  state.age = age;
+  render();
+}
+
+function renderStep3(container) {
+  const mData = municipalities[state.municipality];
+  const ageInfo = vaccineSchedule[state.age];
+
+  // filter centers that have this age's days
+  const validCenters = mData.centers.filter(c => {
+    const ageDays = c.days[state.age];
+    return ageDays && ageDays.length > 0;
+  });
+
+  const vaccineHtml = ageInfo.vaccines.map(v =>
+    `<span class="vaccine-pill">💉 ${v}</span>`
+  ).join('');
+
+  const centersHtml = validCenters.length === 0
+    ? `<div class="no-results"><div class="big">😔</div><p>لا توجد مراكز متاحة لهذا العمر في بلدية ${state.municipality}<br>تواصل مع إدارة الصحة المحلية</p></div>`
+    : validCenters.map(c => {
+        const days = c.days[state.age];
+        const daysHtml = days.map(d =>
+          `<span class="day-chip ${['يومياً','طيلة أيام الأسبوع'].includes(d) ? 'highlight' : ''}">${d}</span>`
+        ).join('');
+        return `
+          <div class="center-card">
+            <div class="center-name">🏥 ${c.name}</div>
+            <div class="center-info">
+              ${c.address ? `<div class="center-row"><span class="lbl">📍 العنوان:</span> <span>${c.address}</span></div>` : ''}
+              ${c.note ? `<div class="center-row"><span class="lbl">ℹ️ ملاحظة:</span> <span>${c.note}</span></div>` : ''}
+              <div class="center-row"><span class="lbl">📅 أيام التطعيم:</span></div>
+              <div class="days-wrap">${daysHtml}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+  container.innerHTML = `
+    <div class="results-header">
+      <h2>نتائج البحث</h2>
+      <p>وجدنا <strong>${validCenters.length}</strong> مركز صحي متاح</p>
+      <div class="results-meta">
+        <span class="tag">🏙️ ${state.municipality}</span>
+        <span class="tag">${ageInfo.emoji} ${ageInfo.label}</span>
+      </div>
+    </div>
+
+    <div class="vaccines-card">
+      <h3>💉 التطعيمات المطلوبة</h3>
+      <div>${vaccineHtml}</div>
+    </div>
+
+    ${centersHtml}
+
+    <button class="btn-reset" onclick="resetAll()">🔄 بحث جديد</button>
+  `;
+
+  document.getElementById('btn-next').style.display = 'none';
+}
+
+function resetAll() {
+  state = { step: 1, municipality: null, age: null };
+  render();
+}
+
+// =============================================
+// INIT
+// =============================================
+render();
+</script>
+
+<!-- Service Worker Registration -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => console.log('SW registered'))
+      .catch(err => console.log('SW error:', err));
+  });
+}
+</script>
+</body>
+</html>
