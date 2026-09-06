@@ -441,6 +441,27 @@
       color: var(--blue-dark);
       font-weight: 700;
     }
+    .btn-maps {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 9px 14px;
+      background: rgba(35,84,164,0.08);
+      border: 1px solid rgba(35,84,164,0.25);
+      border-radius: var(--radius-sm);
+      color: var(--blue-mid);
+      font-family: 'Cairo', sans-serif;
+      font-size: 12.5px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn-maps:hover, .btn-maps:active {
+      background: rgba(35,84,164,0.16);
+      border-color: var(--blue-mid);
+    }
 
     /* ===== RESET BTN ===== */
     .btn-reset {
@@ -1434,6 +1455,15 @@ const municipalities = {
 }
 
 // =============================================
+// MAPS
+// =============================================
+function buildMapsUrl(centerName, address, muniName) {
+  const parts = [centerName, address, muniName, "ليبيا"].filter(Boolean);
+  const query = parts.join(" ");
+  return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(query);
+}
+
+// =============================================
 // STATE
 // =============================================
 let state = { step: 1, municipality: null, age: null };
@@ -1624,6 +1654,7 @@ function renderStep3(container) {
         const daysHtml = days.map(d =>
           `<span class="day-chip ${['يومياً','طيلة أيام الأسبوع'].includes(d) ? 'highlight' : ''}">${d}</span>`
         ).join('');
+        const mapsUrl = buildMapsUrl(c.name, c.address, state.municipality);
         return `
           <div class="center-card">
             <div class="center-name">🏥 ${c.name}</div>
@@ -1632,6 +1663,7 @@ function renderStep3(container) {
               ${c.note ? `<div class="center-row"><span class="lbl">ℹ️ ملاحظة:</span> <span>${c.note}</span></div>` : ''}
               <div class="center-row"><span class="lbl">📅 أيام التطعيم:</span></div>
               <div class="days-wrap">${daysHtml}</div>
+              <a class="btn-maps" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">🗺️ افتح في خرائط جوجل</a>
             </div>
           </div>
         `;
