@@ -208,7 +208,7 @@
     }
 
     /* ===== MAIN CONTENT ===== */
-    .main { padding: 20px 16px 100px; max-width: 600px; margin: 0 auto; }
+    .main { padding: 20px 16px 40px; max-width: 600px; margin: 0 auto; }
 
     /* ===== SECTION CARDS ===== */
     .section-card {
@@ -499,6 +499,16 @@
       cursor: not-allowed;
     }
 
+    /* ===== BACK HINT ===== */
+    .back-hint {
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      margin: 4px auto 8px;
+      max-width: 600px;
+      display: none;
+    }
+
     /* ===== EMPTY ===== */
     .empty-state {
       text-align: center;
@@ -578,10 +588,8 @@
 <div class="main" id="main-content"></div>
 
 <!-- BOTTOM NAV -->
-<div class="bottom-nav">
-  <button class="btn-nav secondary" id="btn-back" onclick="goBack()" disabled>→ رجوع</button>
-  <button class="btn-nav primary" id="btn-next" onclick="goNext()" disabled>التالي ←</button>
-</div>
+<!-- تم حذف أزرار التالي/رجوع: الانتقال يصير تلقائياً عند اختيار خيار، والرجوع يصير بزر رجوع الهاتف/المتصفح -->
+<p class="back-hint" id="back-hint">↩️ اضغط زر الرجوع بهاتفك للعودة للخطوة السابقة</p>
 
 <script>
 // =============================================
@@ -1472,36 +1480,8 @@ function updateSteps() {
     document.getElementById(id).classList.toggle('done', step > i + 2);
   });
 
-  const btnBack = document.getElementById('btn-back');
-  const btnNext = document.getElementById('btn-next');
-  btnBack.disabled = step === 1;
-
-  if (step === 1) {
-    btnNext.textContent = 'التالي ←';
-    btnNext.disabled = !state.municipality;
-  } else if (step === 2) {
-    btnNext.textContent = 'عرض النتائج ←';
-    btnNext.disabled = !state.age;
-  } else {
-    btnNext.style.display = 'none';
-  }
-  if (step === 3) btnNext.style.display = 'none';
-  else btnNext.style.display = '';
-}
-
-function goNext() {
-  if (state.step === 1 && state.municipality) state.step = 2;
-  else if (state.step === 2 && state.age) state.step = 3;
-  render();
-}
-
-function goBack() {
-  if (state.step > 1) {
-    state.step--;
-    if (state.step === 1) state.municipality = null;
-    if (state.step === 2) state.age = null;
-    render();
-  }
+  const hint = document.getElementById('back-hint');
+  if (hint) hint.style.display = step === 1 ? 'none' : 'block';
 }
 
 // =============================================
@@ -1517,7 +1497,7 @@ function render() {
 
 function renderMuniBtn(m) {
   return `
-    <button class="choice-btn ${state.municipality === m ? 'selected' : ''}" onclick="selectMunicipality('${m}')">
+    <button class="choice-btn ${state.municipality === m ? 'selected' : ''}" onclick="selectMunicipality('${m}', this)">
       🏙️ ${m}
     </button>
   `;
@@ -1575,10 +1555,17 @@ function filterMunicipalities(query) {
   }
 }
 
-function selectMunicipality(m) {
+function selectMunicipality(m, btnEl) {
+  // تلميح بصري سريع قبل الانتقال التلقائي
+  document.querySelectorAll('#muni-grid .choice-btn').forEach(b => b.classList.remove('selected'));
+  if (btnEl) btnEl.classList.add('selected');
   state.municipality = m;
   state.age = null;
-  render();
+  setTimeout(() => {
+    state.step = 2;
+    history.pushState({ step: 2, municipality: state.municipality, age: null }, '', '#step-2');
+    render();
+  }, 180);
 }
 
 function renderStep2(container) {
@@ -1594,7 +1581,7 @@ function renderStep2(container) {
         ${ages.map(age => {
           const info = vaccineSchedule[age];
           return `
-            <button class="age-btn ${state.age === age ? 'selected' : ''}" onclick="selectAge('${age}')">
+            <button class="age-btn ${state.age === age ? 'selected' : ''}" onclick="selectAge('${age}', this)">
               <span class="emoji">${info.emoji}</span>
               ${info.label}
             </button>
@@ -1605,9 +1592,15 @@ function renderStep2(container) {
   `;
 }
 
-function selectAge(age) {
+function selectAge(age, btnEl) {
+  document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('selected'));
+  if (btnEl) btnEl.classList.add('selected');
   state.age = age;
-  render();
+  setTimeout(() => {
+    state.step = 3;
+    history.pushState({ step: 3, municipality: state.municipality, age: state.age }, '', '#step-3');
+    render();
+  }, 180);
 }
 
 function renderStep3(container) {
@@ -1663,18 +1656,32 @@ function renderStep3(container) {
 
     <button class="btn-reset" onclick="resetAll()">🔄 بحث جديد</button>
   `;
-
-  document.getElementById('btn-next').style.display = 'none';
 }
 
 function resetAll() {
   state = { step: 1, municipality: null, age: null };
+  history.pushState({ step: 1, municipality: null, age: null }, '', '#step-1');
   render();
 }
 
 // =============================================
+// BROWSER / PHONE BACK BUTTON SUPPORT
+// =============================================
+window.addEventListener('popstate', (e) => {
+  if (e.state && typeof e.state.step === 'number') {
+    state.step = e.state.step;
+    state.municipality = e.state.municipality || null;
+    state.age = e.state.age || null;
+  } else {
+    state = { step: 1, municipality: null, age: null };
+  }
+  render();
+});
+
+// =============================================
 // INIT
 // =============================================
+history.replaceState({ step: 1, municipality: null, age: null }, '', '#step-1');
 render();
 </script>
 
